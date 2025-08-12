@@ -2,6 +2,8 @@ import { useState } from "react";
 import InputForm from "./components/parts/InputForm/InputForm";
 import PlanDisplay from "./components/templates/PlanDisplay/PlanDisplay";
 import { dummyPlan } from "./dummyData";
+import axios from "axios";
+import "./App.css";
 
 export interface Plan {
     title: string;
@@ -17,18 +19,36 @@ export interface Plan {
 function App() {
     const [plan, setPlan] = useState<Plan | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
 
     // API呼び出し用の関数
-    const handleGeneratePlan = (destination: string, theme: string) => {
+    const handleGeneratePlan = async (destination: string, theme: string) => {
         setIsLoading(true);
         setPlan(null);
-        console.log("プラン生成開始", { destination, theme });
+        setError(null); // エラーをリセット
 
-        // 2秒経ったらダミーデータをセット
-        setTimeout(() => {
-            setPlan(dummyPlan);
+        try {
+            // バックエンドのAPIエンドポイントにPOSTリクエストを送信
+            const response = await axios.post(
+                `${import.meta.env.VITE_API_URL}/api/generate-plan`,
+                {
+                    destination: destination,
+                    theme: theme,
+                }
+            );
+
+            // 成功したら、レスポンスデータをstateにセット
+            setPlan(response.data);
+        } catch (err) {
+            // エラーが発生したら、エラーメッセージをstateにセット
+            console.error("API Error:", err);
+            setError(
+                "プランの生成に失敗しました。時間をおいて再度お試しください。"
+            );
+        } finally {
+            // 成功しても失敗しても、ローディングは終了する
             setIsLoading(false);
-        }, 2000);
+        }
     };
 
     return (
@@ -41,7 +61,8 @@ function App() {
                 isLoading={isLoading}
             ></InputForm>
             {isLoading && <p>プラン生成中です</p>}
-            {plan && <PlanDisplay planData={plan}></PlanDisplay>}
+            {error && <p style={{ color: "red" }}>{error}</p>}{" "}
+            {plan && !isLoading && <PlanDisplay planData={plan}></PlanDisplay>}{" "}
         </div>
     );
 }
