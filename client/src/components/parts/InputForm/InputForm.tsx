@@ -14,6 +14,7 @@ type InputFormProps = {
 const InputForm: React.FC<InputFormProps> = ({ onGenerate, isLoading }) => {
     const [destination, setDestination] = useState("");
     const [theme, setTheme] = useState("");
+    const [clicked, setClicked] = useState(false);
     const tourStyle = ["歴史", "グルメ", "自然", "体験"];
 
     const handleInputDestination = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,13 +41,18 @@ const InputForm: React.FC<InputFormProps> = ({ onGenerate, isLoading }) => {
                     return (
                         <TopInputButton
                             key={style}
+                            isActive={theme === style}
                             style={style}
                             setTheme={setTheme}
                         ></TopInputButton>
                     );
                 })}
             </div>
-            <button type="submit" disabled={isLoading}>
+            <button
+                className="generateButton"
+                type="submit"
+                disabled={isLoading}
+            >
                 {isLoading ? "生成中..." : "生成"}
             </button>
         </form>
