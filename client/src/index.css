@@ -53,6 +53,7 @@ button {
     border: 1px solid #ccc;
     transition: border-color 0.25s;
 }
+
 button.active {
     border-color: #535bf2;
     border: solid 4px #ccc;
