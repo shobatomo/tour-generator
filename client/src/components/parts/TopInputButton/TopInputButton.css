@@ -1,5 +1,7 @@
 .inputStyleButton {
     min-width: 120px;
+    box-sizing: border-box;
+    height: 100px;
     transition: transform 0.2s ease, border-color 0.2s ease;
     background: linear-gradient(
         135deg,
@@ -55,4 +57,8 @@
 
 .inputStyleButton:hover {
     transform: scale(1.06);
+}
+
+.inputStyleButton:active {
+    transform: scale(1.03);
 }

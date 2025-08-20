@@ -52,20 +52,28 @@ function App() {
     };
 
     return (
-        <div className="topContainer">
-            <div className="titleContainer">
-                <h1 className="titleText">AI旅行プランナー</h1>
-                <p className="subTitleText">AIがあなたの旅行に勇気を添えます</p>
+        <div className="mainBody">
+            <div className="topContainer">
+                <div className="titleContainer">
+                    <h1 className="titleText">AI旅行プランナー</h1>
+                    <p className="subTitleText">
+                        AIがあなたの旅行に勇気を添えます
+                    </p>
+                </div>
+                <InputForm
+                    onGenerate={(destination, theme) =>
+                        handleGeneratePlan(destination, theme)
+                    }
+                    isLoading={isLoading}
+                ></InputForm>
+                <div className="messageContainer">
+                    {isLoading && <p>プラン生成中です</p>}
+                    {error && <p style={{ color: "red" }}>{error}</p>}{" "}
+                    {plan && !isLoading && (
+                        <PlanDisplay planData={plan}></PlanDisplay>
+                    )}{" "}
+                </div>
             </div>
-            <InputForm
-                onGenerate={(destination, theme) =>
-                    handleGeneratePlan(destination, theme)
-                }
-                isLoading={isLoading}
-            ></InputForm>
-            {isLoading && <p>プラン生成中です</p>}
-            {error && <p style={{ color: "red" }}>{error}</p>}{" "}
-            {plan && !isLoading && <PlanDisplay planData={plan}></PlanDisplay>}{" "}
         </div>
     );
 }

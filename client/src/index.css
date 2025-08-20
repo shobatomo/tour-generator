@@ -13,6 +13,11 @@
     -moz-osx-font-smoothing: grayscale;
     border-color: #ccc;
 }
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
 
 a {
     font-weight: 500;
@@ -44,11 +49,21 @@ button {
     font-family: inherit;
     background-color: #1a1a1a;
     cursor: pointer;
+    box-sizing: border-box;
     border: 1px solid #ccc;
     transition: border-color 0.25s;
 }
 button.active {
     border-color: #535bf2;
+    border: solid 4px #ccc;
+}
+
+button:hover {
+    transform: scale(1.06);
+}
+
+button:active {
+    transform: scale(1.03);
 }
 
 @media (prefers-color-scheme: light) {

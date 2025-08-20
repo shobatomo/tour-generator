@@ -14,7 +14,6 @@ type InputFormProps = {
 const InputForm: React.FC<InputFormProps> = ({ onGenerate, isLoading }) => {
     const [destination, setDestination] = useState("");
     const [theme, setTheme] = useState("");
-    const [clicked, setClicked] = useState(false);
     const tourStyle = ["歴史", "グルメ", "自然", "体験"];
 
     const handleInputDestination = (e: React.ChangeEvent<HTMLInputElement>) => {
