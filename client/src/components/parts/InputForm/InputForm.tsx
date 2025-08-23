@@ -15,6 +15,7 @@ const InputForm: React.FC<InputFormProps> = ({ onGenerate, isLoading }) => {
     const [destination, setDestination] = useState("");
     const [theme, setTheme] = useState("");
     const tourStyle = ["歴史", "グルメ", "自然", "体験"];
+    const [bgPosition, setBgPosition] = useState(300);
 
     const handleInputDestination = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDestination(e.target.value);
@@ -51,6 +52,10 @@ const InputForm: React.FC<InputFormProps> = ({ onGenerate, isLoading }) => {
                 className="generateButton"
                 type="submit"
                 disabled={isLoading}
+                style={{ backgroundPosition: "0 " + bgPosition + "px" }}
+                onMouseDown={() => {
+                    setBgPosition(bgPosition + 2);
+                }}
             >
                 {isLoading ? "生成中..." : "生成"}
             </button>
