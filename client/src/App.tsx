@@ -55,9 +55,14 @@ function App() {
         <div className="mainBody">
             <div className="topContainer">
                 <div className="titleContainer">
-                    <h1 className="titleText">AI旅行プランナー</h1>
+                    <h1 className="titleText">Quested</h1>
                     <p className="subTitleText">
-                        AIがあなたの旅行に勇気を添えます
+                        AIと見つける、新しい旅のカタチ
+                    </p>
+                    <p className="titleDescription">
+                        行き先とスタイルを入力するだけで、<br />
+                        AIがあなたにぴったりの日帰りプランと<br />
+                        旅を10倍楽しくするクエストを提案します。
                     </p>
                 </div>
                 <InputForm
