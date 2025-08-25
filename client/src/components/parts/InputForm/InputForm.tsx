@@ -8,12 +8,12 @@ type InputFormProps = {
 };
 
 const InputForm: React.FC<InputFormProps> = ({ onGenerate, isLoading }) => {
-    const [destination, setDestination] = useState("");
-    const [theme, setTheme] = useState("");
-    const tourStyle = ["歴史", "グルメ", "自然", "体験"];
-    const [isHolding, setIsHolding] = useState(false);
-    const [progress, setProgress] = useState(0);
+    const [destination, setDestination] = useState<string>("");
+    const [theme, setTheme] = useState<string>("");
+    const [isHolding, setIsHolding] = useState<boolean>(false);
+    const [progress, setProgress] = useState<number>(0);
 
+    const tourStyle = ["歴史", "グルメ", "自然", "体験"];
     const animationFrameId = useRef<number | null>(null);
     const submitted = useRef(false);
 
@@ -72,6 +72,20 @@ const InputForm: React.FC<InputFormProps> = ({ onGenerate, isLoading }) => {
         }
     };
 
+    // ボタンが押せるか押せないかを決める
+    const shouldButtonDisabled = (): boolean => {
+        // ロード中はボタンが押せないように
+        if (isLoading) {
+            return true;
+        }
+        // 行先とスタイルが決まっていないときはボタンを押せないようにする
+        if (destination.trim() === "" || theme.trim() === "") {
+            return true;
+        }
+
+        return false;
+    };
+
     return (
         <div className="topForm">
             <div className="inputDestination">
@@ -101,7 +115,7 @@ const InputForm: React.FC<InputFormProps> = ({ onGenerate, isLoading }) => {
             <button
                 className="generateButton"
                 type="button"
-                disabled={isLoading}
+                disabled={shouldButtonDisabled()}
                 style={{
                     width: "150px",
                     height: "150px",
