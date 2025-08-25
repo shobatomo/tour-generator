@@ -10,7 +10,7 @@ type PlanDisplayProps = {
 // PlanDisplayProps型を使用してPropsを受け取る関数であることを明示する
 const PlanDisplay: React.FC<PlanDisplayProps> = ({ planData }) => {
     return (
-        <div className="timeLineContainer">
+        <div className="timelineContainer">
             <h2>{planData.title}</h2>
             {planData.timeline.map((item, index) => (
                 <div className="timelineItem" key={index}>
