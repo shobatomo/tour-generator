@@ -26,9 +26,7 @@ const InputForm: React.FC<InputFormProps> = ({ onGenerate, isLoading }) => {
                         return 100;
                     }
                     animationFrameId.current = requestAnimationFrame(animate);
-                    // ★★★速度を現実的な値に調整することをお勧めします★★★
-                    // 例: prev + 1.2 （約1.5秒で完了）
-                    return Math.min(prev + 1.2, 100);
+                    return Math.min(prev + 1.3, 100);
                 });
             } else {
                 setProgress((prev) => {
@@ -36,7 +34,7 @@ const InputForm: React.FC<InputFormProps> = ({ onGenerate, isLoading }) => {
                         return 0;
                     }
                     animationFrameId.current = requestAnimationFrame(animate);
-                    return Math.max(prev - 2, 0); // 減少速度も少し速めました
+                    return Math.max(prev - 4, 0);
                 });
             }
         };
