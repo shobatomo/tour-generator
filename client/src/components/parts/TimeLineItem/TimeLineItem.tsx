@@ -50,7 +50,7 @@ const TimeLineItem: React.FC<TimeLineItemProps> = ({ item }) => {
                 style={{
                     marginTop: "10px",
                     padding: "10px",
-                    background: "#f5f5f5",
+                    background: "transparent",
                 }}
             >
                 <strong>クエスト：</strong>
