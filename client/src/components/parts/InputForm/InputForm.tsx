@@ -2,100 +2,80 @@ import React, { useEffect, useRef, useState } from "react";
 import "./InputForm.css"; // スタイルシートのインポート
 import TopInputButton from "../TopInputButton/TopInputButton";
 
-// typeでpropsの方を定義する
 type InputFormProps = {
-    // 渡された関数に引数を渡すことができる
-    // 元の関数に渡す引数を子コンポーネントから渡す
     onGenerate: (destination: string, theme: string) => void;
     isLoading: boolean;
 };
 
-// 定義した型を使用するReactFunctionだと明示する
 const InputForm: React.FC<InputFormProps> = ({ onGenerate, isLoading }) => {
     const [destination, setDestination] = useState("");
     const [theme, setTheme] = useState("");
     const tourStyle = ["歴史", "グルメ", "自然", "体験"];
-    const [bgPosition, setBgPosition] = useState(0);
     const [isHolding, setIsHolding] = useState(false);
     const [progress, setProgress] = useState(0);
 
-    
     const animationFrameId = useRef<number | null>(null);
-    
-    // isHoldingの状態が変わるたびにこのeffectが実行される
+    const submitted = useRef(false);
+
+    // isHoldingの状態に基づいてアニメーションを制御するuseEffect
     useEffect(() => {
-        // アニメーションのメインループ
         const animate = () => {
             if (isHolding) {
-                // isHoldingがtrueの場合：progressを100に向かって増やす
-                setProgress(prev => {
-                    // 既に100に達していたらループを止める
+                setProgress((prev) => {
                     if (prev >= 100) {
                         return 100;
                     }
-                    // 次のフレームを予約
                     animationFrameId.current = requestAnimationFrame(animate);
-                    // 値を更新（値が大きいほど速くアニメーションします）
-                    return Math.min(prev + 0.005, 100);
+                    // ★★★速度を現実的な値に調整することをお勧めします★★★
+                    // 例: prev + 1.2 （約1.5秒で完了）
+                    return Math.min(prev + 1.2, 100);
                 });
             } else {
-                // isHoldingがfalseの場合：progressを0に向かって減らす
-                setProgress(prev => {
+                setProgress((prev) => {
                     if (prev <= 0) {
                         return 0;
                     }
-                    // 次のフレームを予約
                     animationFrameId.current = requestAnimationFrame(animate);
-                    // 値を更新
-                    return Math.max(prev - 0.2, 0);
+                    return Math.max(prev - 2, 0); // 減少速度も少し速めました
                 });
             }
         };
-        
-        // アニメーションを開始
+
         animationFrameId.current = requestAnimationFrame(animate);
-        
-        // クリーンアップ関数
-        // このeffectが再実行される前、またはコンポーネントがアンマウントされる時に実行される
+
         return () => {
-            // 前のアニメーションフレームをキャンセルして、ループが重複しないようにする
             if (animationFrameId.current !== null) {
                 cancelAnimationFrame(animationFrameId.current);
             }
         };
-        
     }, [isHolding]);
-    
+
+    // progressが100に達したときの処理 (このロジックは正しいです)
+    useEffect(() => {
+        if (progress >= 100 && !submitted.current) {
+            onGenerate(destination, theme);
+            submitted.current = true;
+        }
+    }, [progress, destination, theme, onGenerate]);
+
     const handleInputDestination = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDestination(e.target.value);
     };
 
-    const handlePressStart = ()=> setIsHolding(true);
-    const handlePressEnd = () => setIsHolding(false);
-
-    // ボタンのスタイルを変数で定義する
-    const style = {
-        width: '150px',
-        height: '150px',
-        border: '2px solid #555',
-        borderRadius: '50%',
-        
-        // --- ここが重要 ---
-        // 下(to top)から青色がprogress%の位置まで満ち、残りは透明にする
-        background: `linear-gradient(to top, royalblue ${progress}%, transparent ${progress}%)`,
-        
-        // こちらはtransitionが効きにくいので注意
+    const handlePressStart = () => {
+        submitted.current = false;
+        setIsHolding(true);
     };
 
+    const handlePressEnd = () => {
+        setIsHolding(false);
+    };
+
+    // ▼▼▼ ここを変更 ▼▼▼
+    // <form> を <div> に変更し、onSubmitを削除
     return (
-        <form
-            className="topForm"
-            onSubmit={(e) => {
-                e.preventDefault();
-                onGenerate(destination, theme);
-            }}
-        >
-            {/* 他の入力フィールドをここに追加できます */}
+        <div className="topForm">
+            {/* 他の入力フィールド */}
             <div className="inputDestination">
                 <label htmlFor="destination" className="destinationLabel">
                     行き先
@@ -108,35 +88,61 @@ const InputForm: React.FC<InputFormProps> = ({ onGenerate, isLoading }) => {
                     onChange={handleInputDestination}
                 />
             </div>
-            <div className="styleContainerLabel">
-                スタイル
-            </div>
+            <div className="styleContainerLabel">スタイル</div>
             <div className="styleButtonContainer">
-                {tourStyle.map((style) => {
-                    return (
-                        <TopInputButton
-                            key={style}
-                            isActive={theme === style}
-                            style={style}
-                            setTheme={setTheme}
-                        ></TopInputButton>
-                    );
-                })}
+                {tourStyle.map((style) => (
+                    <TopInputButton
+                        key={style}
+                        isActive={theme === style}
+                        style={style}
+                        setTheme={setTheme}
+                    />
+                ))}
             </div>
+
+            {/* 生成ボタン (この部分は変更なし) */}
             <button
                 className="generateButton"
-                type="submit"
+                type="button"
                 disabled={isLoading}
-                style={style}
+                style={{
+                    width: "150px",
+                    height: "150px",
+                    border: "2px solid #555",
+                    borderRadius: "50%",
+                    position: "relative",
+                    overflow: "hidden",
+                    backgroundColor: "transparent", // 元のコードの通り
+                }}
                 onMouseDown={handlePressStart}
                 onMouseUp={handlePressEnd}
                 onMouseLeave={handlePressEnd}
                 onTouchStart={handlePressStart}
                 onTouchEnd={handlePressEnd}
             >
-                {isLoading ? "生成中..." : "生成"}
+                {/* ...ボタンの中身は変更なし... */}
+                <div
+                    style={{
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                        width: "100%",
+                        backgroundColor: "royalblue",
+                        height: `${progress}%`,
+                        transition: "height 0.1s linear",
+                    }}
+                ></div>
+                <span
+                    style={{ position: "relative", zIndex: 1, color: "white" }}
+                >
+                    {isLoading
+                        ? "生成中..."
+                        : progress >= 100
+                        ? "完了!"
+                        : "長押しで生成"}
+                </span>
             </button>
-        </form>
+        </div> // ▲▲▲ </form> を </div> に変更 ▲▲▲
     );
 };
 
