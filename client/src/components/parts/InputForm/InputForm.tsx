@@ -17,6 +17,8 @@ const InputForm: React.FC<InputFormProps> = ({ onGenerate, isLoading }) => {
     const animationFrameId = useRef<number | null>(null);
     const submitted = useRef(false);
 
+    const progressRef = useRef(progress);
+
     // isHoldingの状態に基づいてアニメーションを制御するuseEffect
     useEffect(() => {
         const animate = () => {
@@ -48,13 +50,9 @@ const InputForm: React.FC<InputFormProps> = ({ onGenerate, isLoading }) => {
         };
     }, [isHolding]);
 
-    // progressが100に達したときの処理 (このロジックは正しいです)
     useEffect(() => {
-        if (progress >= 100 && !submitted.current) {
-            onGenerate(destination, theme);
-            submitted.current = true;
-        }
-    }, [progress, destination, theme, onGenerate]);
+        progressRef.current = progress;
+    }, [progress]);
 
     const handleInputDestination = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDestination(e.target.value);
@@ -67,13 +65,15 @@ const InputForm: React.FC<InputFormProps> = ({ onGenerate, isLoading }) => {
 
     const handlePressEnd = () => {
         setIsHolding(false);
+
+        if (progressRef.current >= 100 && !submitted.current) {
+            onGenerate(destination, theme);
+            submitted.current = true;
+        }
     };
 
-    // ▼▼▼ ここを変更 ▼▼▼
-    // <form> を <div> に変更し、onSubmitを削除
     return (
         <div className="topForm">
-            {/* 他の入力フィールド */}
             <div className="inputDestination">
                 <label htmlFor="destination" className="destinationLabel">
                     行き先
@@ -98,7 +98,6 @@ const InputForm: React.FC<InputFormProps> = ({ onGenerate, isLoading }) => {
                 ))}
             </div>
 
-            {/* 生成ボタン (この部分は変更なし) */}
             <button
                 className="generateButton"
                 type="button"
@@ -110,7 +109,7 @@ const InputForm: React.FC<InputFormProps> = ({ onGenerate, isLoading }) => {
                     borderRadius: "50%",
                     position: "relative",
                     overflow: "hidden",
-                    backgroundColor: "transparent", // 元のコードの通り
+                    backgroundColor: "transparent",
                 }}
                 onMouseDown={handlePressStart}
                 onMouseUp={handlePressEnd}
@@ -118,7 +117,6 @@ const InputForm: React.FC<InputFormProps> = ({ onGenerate, isLoading }) => {
                 onTouchStart={handlePressStart}
                 onTouchEnd={handlePressEnd}
             >
-                {/* ...ボタンの中身は変更なし... */}
                 <div
                     style={{
                         position: "absolute",
@@ -140,7 +138,7 @@ const InputForm: React.FC<InputFormProps> = ({ onGenerate, isLoading }) => {
                         : "長押しで生成"}
                 </span>
             </button>
-        </div> // ▲▲▲ </form> を </div> に変更 ▲▲▲
+        </div>
     );
 };
 

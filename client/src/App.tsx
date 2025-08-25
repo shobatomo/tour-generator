@@ -53,32 +53,34 @@ function App() {
 
     return (
         <div className="mainBody">
-            <div className="topContainer">
-                <div className="titleContainer">
-                    <h1 className="titleText">Quested</h1>
-                    <p className="subTitleText">
-                        AIと見つける、新しい旅のカタチ
-                    </p>
-                    <p className="titleDescription">
-                        行き先とスタイルを入力するだけで、<br />
-                        AIがあなたにぴったりの日帰りプランと<br />
-                        旅を10倍楽しくするクエストを提案します。
-                    </p>
+            {!plan && (
+                <div className="topContainer">
+                    <div className="titleContainer">
+                        <h1 className="titleText">Quested</h1>
+                        <p className="subTitleText">
+                            AIと見つける、新しい旅のカタチ
+                        </p>
+                        <p className="titleDescription">
+                            行き先とスタイルを入力するだけで、
+                            <br />
+                            AIがあなたにぴったりの日帰りプランと
+                            <br />
+                            旅を10倍楽しくするクエストを提案します。
+                        </p>
+                    </div>
+                    <InputForm
+                        onGenerate={(destination, theme) =>
+                            handleGeneratePlan(destination, theme)
+                        }
+                        isLoading={isLoading}
+                    ></InputForm>
+                    <div className="messageContainer">
+                        {isLoading && <p>プラン生成中です</p>}
+                        {error && <p style={{ color: "red" }}>{error}</p>}
+                    </div>
                 </div>
-                <InputForm
-                    onGenerate={(destination, theme) =>
-                        handleGeneratePlan(destination, theme)
-                    }
-                    isLoading={isLoading}
-                ></InputForm>
-                <div className="messageContainer">
-                    {isLoading && <p>プラン生成中です</p>}
-                    {error && <p style={{ color: "red" }}>{error}</p>}{" "}
-                    {plan && !isLoading && (
-                        <PlanDisplay planData={plan}></PlanDisplay>
-                    )}{" "}
-                </div>
-            </div>
+            )}
+            {plan && !isLoading && <PlanDisplay planData={plan}></PlanDisplay>}
         </div>
     );
 }
