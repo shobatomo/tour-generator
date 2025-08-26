@@ -59,11 +59,17 @@ const InputForm: React.FC<InputFormProps> = ({ onGenerate, isLoading }) => {
     };
 
     const handlePressStart = () => {
+        if (isHolding) {
+            return;
+        }
         submitted.current = false;
         setIsHolding(true);
     };
 
     const handlePressEnd = () => {
+        if (isHolding) {
+            return;
+        }
         setIsHolding(false);
 
         if (progressRef.current >= 100 && !submitted.current) {
