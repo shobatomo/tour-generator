@@ -13,6 +13,8 @@ export interface Plan {
         description: string;
         url: string;
         quest: string;
+        howto: string;
+        error: boolean;
     }[];
 }
 
@@ -25,7 +27,7 @@ function App() {
     const handleGeneratePlan = async (destination: string, theme: string) => {
         setIsLoading(true);
         setPlan(null);
-        setError(null); // エラーをリセット
+        setError(null);
 
         try {
             // バックエンドのAPIエンドポイントにPOSTリクエストを送信
@@ -37,6 +39,9 @@ function App() {
                 }
             );
 
+            if (response.data.error) {
+                throw new Error("プランの生成に失敗しました。");
+            }
             // 成功したら、レスポンスデータをstateにセット
             setPlan(response.data);
         } catch (err) {

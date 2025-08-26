@@ -9,6 +9,8 @@ type ItemType = {
     description: string;
     url: string;
     quest: string;
+    howto: string;
+    error: boolean;
 };
 
 // Propsの型を定義する
@@ -32,6 +34,7 @@ const TimeLineItem: React.FC<TimeLineItemProps> = ({ item }) => {
                 {item.time} - {item.spotName}
             </h3>
             <p>{item.description}</p>
+            <div className="howto">{item.howto}</div>
 
             {/* URLが存在する場合のみ、リンクを表示する */}
             {item.url && (
