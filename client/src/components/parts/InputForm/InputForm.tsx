@@ -67,11 +67,7 @@ const InputForm: React.FC<InputFormProps> = ({ onGenerate, isLoading }) => {
     };
 
     const handlePressEnd = () => {
-        if (isHolding) {
-            return;
-        }
         setIsHolding(false);
-
         if (progressRef.current >= 100 && !submitted.current) {
             onGenerate(destination, theme);
             submitted.current = true;
@@ -88,7 +84,6 @@ const InputForm: React.FC<InputFormProps> = ({ onGenerate, isLoading }) => {
         if (destination.trim() === "" || theme.trim() === "") {
             return true;
         }
-
         return false;
     };
 

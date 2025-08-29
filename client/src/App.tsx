@@ -1,7 +1,6 @@
 import { useState } from "react";
 import InputForm from "./components/parts/InputForm/InputForm";
 import PlanDisplay from "./components/templates/PlanDisplay/PlanDisplay";
-import { dummyPlan } from "./dummyData";
 import axios from "axios";
 import "./App.css";
 
@@ -42,16 +41,13 @@ function App() {
             if (response.data.error) {
                 throw new Error("プランの生成に失敗しました。");
             }
-            // 成功したら、レスポンスデータをstateにセット
             setPlan(response.data);
         } catch (err) {
-            // エラーが発生したら、エラーメッセージをstateにセット
             console.error("API Error:", err);
             setError(
                 "プランの生成に失敗しました。時間をおいて再度お試しください。"
             );
         } finally {
-            // 成功しても失敗しても、ローディングは終了する
             setIsLoading(false);
         }
     };
