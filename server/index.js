@@ -114,7 +114,7 @@ app.post('/api/generate-plan', async (req, res) => {
                                     },
                                     howto: { type: 'STRING' }
                                 },
-                                required: ['time', 'spotName', 'description', 'quest'],
+                                required: ['time', 'spotName', 'description', 'quests'],
                             },
                         },
                         error: { type: 'BOOLEAN' }
