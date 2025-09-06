@@ -4,6 +4,12 @@ import PlanDisplay from "./components/templates/PlanDisplay/PlanDisplay";
 import axios from "axios";
 import "./App.css";
 
+type Quest ={
+    quest:string;
+    point:number;
+    difficulty:string;
+}
+
 export interface Plan {
     title: string;
     timeline: {
@@ -11,7 +17,7 @@ export interface Plan {
         spotName: string;
         description: string;
         url: string;
-        quest: string;
+        quests: Array<Quest>;
         howto: string;
         error: boolean;
     }[];

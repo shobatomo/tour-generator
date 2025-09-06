@@ -1,14 +1,21 @@
 // src/components/TimeLineItem.tsx
 
 import React from "react";
+import QuestCard from "../QuestCard/QusetCard";
 
 // コンポーネントが受け取るPropsのデータ型
+type Quest ={
+    quest: string;
+    point:number;
+    difficulty:string;
+}
+
 type ItemType = {
     time: string;
     spotName: string;
     description: string;
     url: string;
-    quest: string;
+    quests: Array<Quest>;
     howto: string;
     error: boolean;
 };
@@ -57,7 +64,13 @@ const TimeLineItem: React.FC<TimeLineItemProps> = ({ item }) => {
                 }}
             >
                 <strong>クエスト：</strong>
-                {item.quest}
+                <div className="questsContainer">
+                    {item.quests.map((quest, index) => {
+                        return(
+                            <QuestCard key={index} ></QuestCard>
+                        )
+                    })}
+                </div>
             </div>
         </div>
     );
