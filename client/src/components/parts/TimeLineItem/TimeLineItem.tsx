@@ -65,11 +65,12 @@ const TimeLineItem: React.FC<TimeLineItemProps> = ({ item }) => {
             >
                 <strong>クエスト：</strong>
                 <div className="questsContainer">
-                    {item.quests.map((quest, index) => {
-                        return(
-                            <QuestCard key={index} ></QuestCard>
-                        )
-                    })}
+                    {item.quests.map((quest, index) => (
+                        <div className="questCard" key={index}>
+                            <QuestCard quest={quest}></QuestCard>
+                        </div>
+                    )
+                    )}
                 </div>
             </div>
         </div>
