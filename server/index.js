@@ -100,6 +100,8 @@ app.post('/api/generate-plan', async (req, res) => {
                                     url: { type: 'STRING' },
                                     quests: {
                                         type: 'ARRAY',
+                                        minItems:3,
+                                        maxItems:3,
                                         items:{
                                             type:'OBJECT',
                                             properties:{
