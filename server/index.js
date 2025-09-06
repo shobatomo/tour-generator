@@ -98,7 +98,18 @@ app.post('/api/generate-plan', async (req, res) => {
                                     spotName: { type: 'STRING' },
                                     description: { type: 'STRING' },
                                     url: { type: 'STRING' },
-                                    quest: { type: 'STRING' },
+                                    quests: {
+                                        type: 'ARRAY',
+                                        items:{
+                                            type:'OBJECT',
+                                            properties:{
+                                                quest:{type:'STRING'},
+                                                point:{type:'INTEGER'},
+                                                difficulty:{type:'STRING'}
+                                            },
+                                            required:['quest', 'point', 'difficulty']
+                                        }, 
+                                    },
                                     howto: { type: 'STRING' }
                                 },
                                 required: ['time', 'spotName', 'description', 'quest'],
